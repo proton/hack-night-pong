@@ -74,6 +74,8 @@ threads << Thread.new do
     else
       $p2_pos -= 1
     end
+    $p2_pos += 1 if $p2_pos < 0
+    $p2_pos -= 1 if $p2_pos == @height - @pwidth + 1
     sleep 0.05
   end
 end
