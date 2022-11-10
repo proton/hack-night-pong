@@ -10,30 +10,32 @@ include Curses
 
 @scores = [0, 0]
 
-@ball_x = 10
-@ball_y = 10
-@ball_dx = 1
-@ball_dy = 1
-
 $p1_pos = 3
 $p2_pos = 5
 
 @pwidth = 5
 
 def update_map
-@map = []
-@map << "x" * (@width * 2 + 3)
-@height.times do |y|
-  @map << ("x" + " " * @width + "|" + " " * @width + "x")
+  @map = []
+  @map << "x" * (@width * 2 + 3)
+  @height.times do |y|
+    @map << ("x" + " " * @width + "|" + " " * @width + "x")
+  end
+
+  @pwidth.times do |j|
+    @map[$p1_pos + 1 + j][3] = "]"
+    @map[$p2_pos + 1 + j][-3] = "["
+  end
+  @map << "x" * (@width * 2 + 3)
+
+  @map[@ball_y + 1][@ball_x + 1] = "o"
 end
 
-@pwidth.times do |j|
-  @map[$p1_pos + 1 + j][3] = "]"
-  @map[$p2_pos + 1 + j][-3] = "["
-end
-@map << "x" * (@width * 2 + 3)
-
-@map[@ball_y + 1][@ball_x + 1] = "o"
+def init_ball
+  @ball_x = @width
+  @ball_y = rand(@height)
+  @ball_dx = [-1, 1].sample
+  @ball_dy = [-1, 1].sample
 end
 
 def redraw_map
@@ -66,10 +68,27 @@ threads << Thread.new do
   loop do
     @ball_x += @ball_dx
     @ball_y += @ball_dy
-    sleep 0.3
+    
+    if @ball_y == -1
+      @ball_dy = -@ball_dy
+    end
+    if @ball_y == @height
+      @ball_dy = -@ball_dy
+    end
+    if @ball_x == 0
+      @scores[1] += 1
+      init_ball
+    end
+    if @ball_x == (2 * @width + 1)
+      @scores[1] += 0
+      init_ball
+    end
+
+    sleep 0.05
   end
 end
 
+init_ball
 threads.map(&:join)
 
 close_screen
