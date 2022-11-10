@@ -12,6 +12,8 @@ include Curses
 
 @ball_x = 10
 @ball_y = 10
+@ball_dx = 1
+@ball_dy = 1
 
 $p1_pos = 3
 $p2_pos = 5
@@ -35,13 +37,9 @@ end
 end
 
 def redraw_map
-setpos(0, 0)
-@map.map { |row| addstr(row + "\n") }
-#puts @map
-#puts "aaa"
-#puts "bbb"
-#print "\r\r"
-refresh
+  setpos(0, 0)
+  @map.map { |row| addstr(row + "\n") }
+  refresh
 end
 
 threads = []
@@ -50,23 +48,25 @@ threads << Thread.new do
   loop do
     update_map # TODO: only if there are changes
     redraw_map
-    sleep 0.5
-    #p [111, $p1_pos]
+    sleep 0.1
   end
 end
 
 threads << Thread.new do
   loop do
-    #p 333
     input = getch
     #raise "aaa"
     $p1_pos -= 1 if input.ord == 65
     $p1_pos += 1 if input.ord == 66
-    #p [222, $p1_pos]
-
-    #p [111, input, input.ord]
-    #p input.ord
     exit if input=="\u0018" or input=="\u0003"
+  end
+end
+
+threads << Thread.new do
+  loop do
+    @ball_x += @ball_dx
+    @ball_y += @ball_dy
+    sleep 0.3
   end
 end
 
