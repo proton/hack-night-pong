@@ -60,6 +60,8 @@ threads << Thread.new do
     input = getch
     $p1_pos -= 1 if input.ord == 65
     $p1_pos += 1 if input.ord == 66
+    $p1_pos += 1 if $p1_pos < 0
+    $p1_pos -= 1 if $p1_pos == @height - @pwidth + 1
     exit if input=="\u0018" or input=="\u0003"
   end
 end
