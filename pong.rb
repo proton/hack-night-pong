@@ -68,6 +68,18 @@ end
 
 threads << Thread.new do
   loop do
+    center = $p2_pos + @pwidth/2
+    if center < @ball_y
+      $p2_pos += 1
+    else
+      $p2_pos -= 1
+    end
+    sleep 0.05
+  end
+end
+
+threads << Thread.new do
+  loop do
     @ball_x += @ball_dx
     @ball_y += @ball_dy
     
