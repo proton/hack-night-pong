@@ -41,6 +41,7 @@ end
 def redraw_map
   setpos(0, 0)
   @map.map { |row| addstr(row + "\n") }
+  addstr("#{@scores[0]} x #{@scores[1]}\n")
   refresh
 end
 
@@ -57,7 +58,6 @@ end
 threads << Thread.new do
   loop do
     input = getch
-    #raise "aaa"
     $p1_pos -= 1 if input.ord == 65
     $p1_pos += 1 if input.ord == 66
     exit if input=="\u0018" or input=="\u0003"
@@ -80,7 +80,7 @@ threads << Thread.new do
       init_ball
     end
     if @ball_x == (2 * @width + 1)
-      @scores[1] += 0
+      @scores[0] += 1
       init_ball
     end
 
