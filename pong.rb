@@ -77,6 +77,13 @@ threads << Thread.new do
     if @ball_y == @height
       @ball_dy = -@ball_dy
     end
+    if @ball_x == 2            && @ball_y >= $p1_pos && @ball_y <= $p1_pos + @pwidth
+      @ball_dx = -@ball_dx
+    end
+    if @ball_x == (@width * 2) && @ball_y >= $p2_pos && @ball_y <= $p2_pos + @pwidth
+      @ball_dx = -@ball_dx
+    end
+
     if @ball_x == 0
       @scores[1] += 1
       init_ball
